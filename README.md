@@ -168,7 +168,7 @@ open build/Beast.app
 | `Resources/AppIcon.icns` | the app icon, scaled up from the original `ICN#` |
 | `Tests/BeastCoreTests/` | tests for every rule in *Game rules* above |
 
-`Beast --snapshot <dir>` writes PNGs of the game window and every dialog, then quits. It's there for
+`Beast --snapshot <dir>` writes PNGs of the game window (at 1x and 2x) and every dialog, then quits. It's there for
 checking the drawing without clicking through the app.
 
 The game logic keeps the original's behaviour, quirks included. The app shell follows the original
@@ -192,9 +192,12 @@ too:
    beast count mid-game let unplaced beasts read memory next to the board. Here they just stay put.
 5. **Background events.** The MultiFinder handler (`DoMulti`) has no macOS equivalent, so its debug
    beep and its 20-tick background sleep are gone. The game still runs in the background.
-6. **Look.** Dialogs have title bars and modern controls, placed at the original positions. Chicago is
-   replaced by the bold system font; Geneva is still Geneva.
+6. **Look.** Dialogs have title bars and modern controls, placed at the original positions. In the
+   dialogs, Chicago is replaced by the system font; Geneva is still Geneva. The clock uses a small
+   bitmap font (`ClockFont.swift`) in the style of the era, made bold the way QuickDraw did it.
 7. **Arrow keys.** They move the man as well as I/J/K/L, and like any key they resume a paused game.
    The original beeped at them.
-8. **Random numbers.** `QDRandom` follows QuickDraw's documented algorithm but hasn't been checked
+8. **Zoom.** View › Actual Size (⌘1) and Double Size (⌘2) zoom the game window, and the choice is
+   remembered. At 2x every original pixel becomes a sharp 2x2 block: nothing is smoothed or blurred.
+9. **Random numbers.** `QDRandom` follows QuickDraw's documented algorithm but hasn't been checked
    against a real Mac. Boards are random either way, because the seed comes from the clock.

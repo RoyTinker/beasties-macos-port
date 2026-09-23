@@ -18,6 +18,12 @@ enum SettingsStore {
                              density: d.integer(forKey: keys.density)).verified()
     }
 
+    /// Game window zoom (View menu): 1 or 2. New in the port.
+    static var scale: Int {
+        get { UserDefaults.standard.integer(forKey: "scale") == 2 ? 2 : 1 }
+        set { UserDefaults.standard.set(newValue, forKey: "scale") }
+    }
+
     static func save(_ s: BeastSettings) {
         let d = UserDefaults.standard
         d.set(s.numBeasts, forKey: keys.numBeasts)

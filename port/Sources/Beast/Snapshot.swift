@@ -15,6 +15,12 @@ enum Snapshot {
         save(board, dir.appendingPathComponent("board-empty.png"))
         game.newGame(seed: 1989)
         save(board, dir.appendingPathComponent("board-newgame.png"))
+        if let board = board as? BoardView {
+            let scale = board.scale
+            board.scale = 2
+            save(board, dir.appendingPathComponent("board-newgame-2x.png"))
+            board.scale = scale
+        }
         save(Dialogs.aboutDialog().contentView, dir.appendingPathComponent("about.png"))
         save(Dialogs.helpDialog().contentView, dir.appendingPathComponent("help.png"))
         save(Dialogs.infoDialog().contentView, dir.appendingPathComponent("info.png"))
@@ -24,7 +30,15 @@ enum Snapshot {
 
     private static func save(_ view: NSView, _ url: URL) {
         view.layoutSubtreeIfNeeded()
-        guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return }
+        // Render at the view's on-screen size on a 2x (Retina) display. The view's bounds
+        // may be smaller than its frame when it is zoomed.
+        let pixels = NSSize(width: view.frame.width * 2, height: view.frame.height * 2)
+        guard let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(pixels.width),
+                                         pixelsHigh: Int(pixels.height), bitsPerSample: 8,
+                                         samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                                         colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)
+        else { return }
+        rep.size = view.bounds.size
         view.cacheDisplay(in: view.bounds, to: rep)
         try? rep.representation(using: .png, properties: [:])?.write(to: url)
     }

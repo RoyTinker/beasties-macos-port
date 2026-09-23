@@ -3,7 +3,7 @@ import BeastCore
 
 /// The application shell: [INIT], [SETUPMEN], [SETUPWIN], [DOMENUBA], the [CHECKEVE] loop
 /// and [SHUTDOWN].
-final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate, NSMenuItemValidation {
     private var settings = SettingsStore.load()
     private lazy var game = BeastGame(settings: settings)
     private var window: NSWindow!
@@ -23,13 +23,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         NSApp.mainMenu = makeMenuBar()
 
         // WIND 128: 506 x 297, "Beast", with a close box.
-        let size = NSSize(width: 506, height: 297)
-        window = NSWindow(contentRect: NSRect(origin: .zero, size: size),
+        board = BoardView(game: game)
+        board.scale = SettingsStore.scale
+        board.afterInput = { [unowned self] in self.update() }
+        window = NSWindow(contentRect: NSRect(origin: .zero, size: board.frame.size),
                           styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
         window.title = "Beast"
         window.delegate = self
-        board = BoardView(game: game, frame: NSRect(origin: .zero, size: size))
-        board.afterInput = { [unowned self] in self.update() }
         window.contentView = board
         window.makeFirstResponder(board)
         window.center()
@@ -121,6 +121,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         edit.addItem(withTitle: "Clear", action: #selector(NSText.delete(_:)), keyEquivalent: "")
         edit.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
 
+        // New in the port: zoom the game window.
+        let view = submenu(of: bar, title: "View")
+        view.addItem(withTitle: "Actual Size", action: #selector(setScale(_:)), keyEquivalent: "1").tag = 1
+        view.addItem(withTitle: "Double Size", action: #selector(setScale(_:)), keyEquivalent: "2").tag = 2
+
         let windowMenu = submenu(of: bar, title: "Window")
         windowMenu.addItem(withTitle: "Minimize", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
         NSApp.windowsMenu = windowMenu
@@ -172,5 +177,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func pause(_ sender: Any?) {
         game.pause()
+    }
+
+    // MARK: - View menu
+
+    @objc private func setScale(_ sender: NSMenuItem) {
+        guard sender.tag != board.scale else { return }
+        SettingsStore.scale = sender.tag
+        board.scale = sender.tag
+        // Keep the window's top-left corner where it is, and keep the window on screen.
+        let old = window.frame
+        var frame = window.frameRect(forContentRect: NSRect(origin: .zero, size: board.frame.size))
+        frame.origin = NSPoint(x: old.minX, y: old.maxY - frame.height)
+        window.setFrame(window.constrainFrameRect(frame, to: window.screen), display: true)
+    }
+
+    func validateMenuItem(_ item: NSMenuItem) -> Bool {
+        if item.action == #selector(setScale(_:)) {
+            item.state = item.tag == board.scale ? .on : .off
+        }
+        return true
     }
 }

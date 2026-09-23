@@ -15,12 +15,24 @@ final class BoardView: NSView {
         .beast: PICTImage(Artwork.beast).image,
     ]
 
-    /// [SETUPWIN] sets TextSize(9) and TextFace([bold]) on the system font, Chicago.
-    private let clockFont = NSFont.boldSystemFont(ofSize: 9)
+    /// The original window content: WIND 128.
+    static let originalSize = NSSize(width: 506, height: 297)
 
-    init(game: BeastGame, frame: NSRect) {
+    /// Whole-number zoom. Drawing always uses the original 506 x 297 coordinates; only the
+    /// frame grows. Sprites are drawn without interpolation, so each original pixel becomes
+    /// a sharp scale x scale block.
+    var scale = 1 {
+        didSet {
+            setFrameSize(NSSize(width: Self.originalSize.width * CGFloat(scale),
+                                height: Self.originalSize.height * CGFloat(scale)))
+            setBoundsSize(Self.originalSize)
+            needsDisplay = true
+        }
+    }
+
+    init(game: BeastGame) {
         self.game = game
-        super.init(frame: frame)
+        super.init(frame: NSRect(origin: .zero, size: Self.originalSize))
     }
 
     @available(*, unavailable)
@@ -55,17 +67,16 @@ final class BoardView: NSView {
     }
 
     /// [DRAWCLOC] "Time: n" in a framed box at (420, 283)-(485, 295). The box overlaps the
-    /// bottom wall row, as in the original.
+    /// bottom wall row, as in the original. Everything here is whole pixels in the original
+    /// coordinates, so it stays sharp and pixelated at every zoom, like the sprites.
     private func drawClock() {
         let box = NSRect(x: 420, y: 283, width: 65, height: 12)
         NSColor.white.setFill()
         box.fill()
-        let text = NSAttributedString(string: "Time: \(game.clock)",
-                                      attributes: [.font: clockFont, .foregroundColor: NSColor.black])
+        NSColor.black.setFill()
+        box.frame(withWidth: 1)
         // MoveTo(422, 293) puts the baseline at y = 293.
-        text.draw(at: NSPoint(x: 422, y: 293 - clockFont.ascender))
-        NSColor.black.setStroke()
-        NSBezierPath(rect: box.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        ClockFont.draw("Time: \(game.clock)", at: NSPoint(x: 422, y: 293))
     }
 
     // MARK: - Input
