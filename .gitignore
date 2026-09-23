@@ -1,0 +1,10 @@
+# Original app: all content is in the resource fork, which git cannot store.
+# It is preserved as original/Beast 1.0.rsrc instead.
+/Beast 1.0
+/Icon?
+__pycache__/
+.DS_Store
+.build/
+.swiftpm/
+/port/build/
+*.xcuserstate
