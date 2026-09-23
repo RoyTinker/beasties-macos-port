@@ -3,6 +3,12 @@
 *Beast 1.0* (Chuck Shotton / BIAP Systems, 3 March 1989) is a shareware Mac game written in
 Lightspeed Pascal. This directory holds the original files plus a full decompilation.
 
+> **Copyright.** Beast 1.0, including its code, artwork and text, is © 1989 Chuck Shotton and BIAP
+> Systems. The original application, its instructions, the resources extracted from it, and the
+> decompiled and disassembled code are included for preservation and study. This project isn't
+> affiliated with or endorsed by the author. If you hold rights to Beast and want anything removed,
+> please open an issue. The Swift port and the tools are © 2026 Roy Tinker.
+
 | Path | What |
 |---|---|
 | `Beast 1.0` | original application (all content is in the **resource fork**; data fork is empty). Not in git |
