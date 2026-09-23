@@ -8,6 +8,10 @@ Lightspeed Pascal. This directory holds the original files plus a full decompila
 > decompiled and disassembled code are included for preservation and study. This project isn't
 > affiliated with or endorsed by the author. If you hold rights to Beast and want anything removed,
 > please open an issue. The Swift port and the tools are © 2026 Roy Tinker.
+>
+> The Swift port in `port/` is released under the [MIT License](port/LICENSE). Two files in it are
+> derived from the original and are **not** covered by that license: `port/Sources/Beast/Artwork.swift`
+> (the original pictures) and `port/Resources/AppIcon.icns` (the original icon).
 
 | Path | What |
 |---|---|
