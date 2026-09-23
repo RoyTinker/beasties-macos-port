@@ -388,6 +388,20 @@ public final class BeastGame {
         }
     }
 
+    public enum Arrow {
+        case up, left, down, right
+    }
+
+    /// Arrow keys: new in the port. Each acts exactly like its I/J/K/L key.
+    public func arrowKey(_ arrow: Arrow) {
+        switch arrow {
+        case .up: keyDown(charCode: 73)             // I
+        case .left: keyDown(charCode: 74)           // J
+        case .down: keyDown(charCode: 75)           // K
+        case .right: keyDown(charCode: 76)          // L
+        }
+    }
+
     /// [DOMOUSED] Any mouse-down resumes a paused game: in the window, the menu bar or the
     /// title bar.
     public func mouseDown() {

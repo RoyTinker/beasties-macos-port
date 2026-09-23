@@ -72,9 +72,17 @@ final class BoardView: NSView {
 
     override func keyDown(with event: NSEvent) {
         guard !event.modifierFlags.contains(.command) else { return super.keyDown(with: event) }
-        // The original used the character code, so shifted and unshifted keys both work.
-        // Keys with no single-byte character (arrows, function keys) beep, as other keys did.
         let scalar = event.characters?.unicodeScalars.first?.value ?? 0xFF
+        // Arrow keys are new in the port. They move the man like I/J/K/L.
+        let arrows: [Int: BeastGame.Arrow] = [NSUpArrowFunctionKey: .up, NSLeftArrowFunctionKey: .left,
+                                              NSDownArrowFunctionKey: .down, NSRightArrowFunctionKey: .right]
+        if let arrow = arrows[Int(scalar)] {
+            game.arrowKey(arrow)
+            afterInput()
+            return
+        }
+        // The original used the character code, so shifted and unshifted keys both work.
+        // Keys with no single-byte character (function keys and so on) beep, as other keys did.
         game.keyDown(charCode: scalar < 0x100 ? Int(scalar) : 0xFF)
         afterInput()
     }

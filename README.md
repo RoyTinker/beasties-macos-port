@@ -194,5 +194,7 @@ too:
    beep and its 20-tick background sleep are gone. The game still runs in the background.
 6. **Look.** Dialogs have title bars and modern controls, placed at the original positions. Chicago is
    replaced by the bold system font; Geneva is still Geneva.
-7. **Random numbers.** `QDRandom` follows QuickDraw's documented algorithm but hasn't been checked
+7. **Arrow keys.** They move the man as well as I/J/K/L, and like any key they resume a paused game.
+   The original beeped at them.
+8. **Random numbers.** `QDRandom` follows QuickDraw's documented algorithm but hasn't been checked
    against a real Mac. Boards are random either way, because the seed comes from the clock.

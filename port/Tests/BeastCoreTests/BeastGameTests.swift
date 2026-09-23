@@ -112,6 +112,38 @@ private let key = (i: 73, j: 74, k: 75, l: 76)
         #expect(g.man == GridPoint(h: 9, v: 11))
     }
 
+    @Test func arrowKeysMoveLikeIJKL() {
+        let g = makeGame()
+        place(man: 10, 10, in: g)
+        g.arrowKey(.right)
+        #expect(g.man == GridPoint(h: 11, v: 10))
+        g.arrowKey(.down)
+        #expect(g.man == GridPoint(h: 11, v: 11))
+        g.arrowKey(.left)
+        #expect(g.man == GridPoint(h: 10, v: 11))
+        g.arrowKey(.up)
+        #expect(g.man == GridPoint(h: 10, v: 10))
+        #expect(g.takeFeedback().isEmpty, "arrows don't beep")
+    }
+
+    @Test func arrowKeysPushBlocksAndResumePlay() {
+        let g = makeGame()
+        place(man: 10, 10, in: g)
+        g.setCell(10, 9, .block)
+        g.pause()
+        g.arrowKey(.up)
+        #expect(!g.paused)
+        #expect(g.man == GridPoint(h: 10, v: 9) && g.cell(10, 8) == .block)
+    }
+
+    @Test func arrowKeysAreIgnoredWhenNotPlaying() {
+        let g = makeGame()
+        place(man: 10, 10, in: g)
+        g.playing = false
+        g.arrowKey(.right)
+        #expect(g.man == GridPoint(h: 10, v: 10))
+    }
+
     @Test func otherKeysBeep() {
         let g = makeGame()
         place(man: 10, 10, in: g)
