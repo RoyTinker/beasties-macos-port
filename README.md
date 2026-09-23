@@ -210,6 +210,6 @@ too:
 7. **Arrow keys.** They move the man as well as I/J/K/L, and like any key they resume a paused game.
    The original beeped at them.
 8. **Zoom.** View › Actual Size (⌘1) and Double Size (⌘2) zoom the game window, and the choice is
-   remembered. At 2x every original pixel becomes a sharp 2x2 block: nothing is smoothed or blurred.
+   remembered. Double Size is the default, unless the screen is too small for it. At 2x every original pixel becomes a sharp 2x2 block: nothing is smoothed or blurred.
 9. **Random numbers.** `QDRandom` follows QuickDraw's documented algorithm but hasn't been checked
    against a real Mac. Boards are random either way, because the seed comes from the clock.

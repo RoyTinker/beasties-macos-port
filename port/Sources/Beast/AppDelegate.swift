@@ -25,6 +25,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         // WIND 128: 506 x 297, "Beast", with a close box.
         board = BoardView(game: game)
         board.scale = SettingsStore.scale
+        // On a screen too small for the zoomed window, start at actual size this time, without
+        // changing the saved choice.
+        if let visible = NSScreen.main?.visibleFrame,
+           board.frame.width > visible.width || board.frame.height + 28 > visible.height {
+            board.scale = 1
+        }
         board.afterInput = { [unowned self] in self.update() }
         window = NSWindow(contentRect: NSRect(origin: .zero, size: board.frame.size),
                           styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)

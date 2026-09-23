@@ -18,9 +18,10 @@ enum SettingsStore {
                              density: d.integer(forKey: keys.density)).verified()
     }
 
-    /// Game window zoom (View menu): 1 or 2. New in the port.
+    /// Game window zoom (View menu): 1 or 2. New in the port. Defaults to 2, because the
+    /// original 506 x 297 window is tiny on modern screens.
     static var scale: Int {
-        get { UserDefaults.standard.integer(forKey: "scale") == 2 ? 2 : 1 }
+        get { UserDefaults.standard.integer(forKey: "scale") == 1 ? 1 : 2 }
         set { UserDefaults.standard.set(newValue, forKey: "scale") }
     }
 
