@@ -8,3 +8,5 @@ __pycache__/
 .swiftpm/
 /port/build/
 *.xcuserstate
+# Full-screen screenshot; the cropped copy is docs/screenshot.jpg
+/screenshot.jpg

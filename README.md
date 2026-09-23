@@ -1,5 +1,7 @@
 # Beast 1.0 — reverse-engineering notes
 
+![Beast running on modern macOS, zoomed to Double Size](docs/screenshot.jpg)
+
 *Beast 1.0* (Chuck Shotton / BIAP Systems, 3 March 1989) is a shareware Mac game written in
 Lightspeed Pascal. This directory holds the original files plus a full decompilation.
 
